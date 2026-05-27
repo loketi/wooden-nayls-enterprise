@@ -1,0 +1,15 @@
+{
+  "area": "10000",
+  "date": "2026-05-27T17:29:00.000+03:00",
+  "status": "published",
+  "duration": "8 Months",
+  "location": "Muthaiga Estate, Nairobi",
+  "title": "Muthaiga Highrise",
+  "images": [
+    "/images/uploads/sample-design1.jpg",
+    "/images/uploads/sample-design2.jpg",
+    "/images/uploads/sample-design3.jpg"
+  ],
+  "description": "This project involved the interior design of all rooms at Muthaiga Highrise apartment. We were involved from the very beginning and undertook all the scoping work etcetera.",
+  "category": "Residential"
+}
