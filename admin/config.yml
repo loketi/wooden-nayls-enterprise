@@ -12,6 +12,8 @@ collections:
     folder: "content/projects"
     create: true
     slug: "{{slug}}"
+    format: json          # ← ADD THIS LINE HERE
+    extension: json       # ← AND THIS LINE HERE
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Category", name: "category", widget: "select",
