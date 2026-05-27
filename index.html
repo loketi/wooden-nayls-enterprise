@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wooden Nayls Enterprise — Interior Design, Nairobi</title>
+  <title>Nayls Enterprise — Interior Design, Nairobi</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1012,12 +1012,13 @@
       .process-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
   <!-- NAV -->
   <nav id="navbar">
-    <a class="nav-logo" href="#hero">Wooden Nayls <span>Enterprise</span></a>
+    <a class="nav-logo" href="#hero">Nayls <span>Enterprise</span></a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
@@ -1038,7 +1039,7 @@
         beautifully.
       </h1>
       <p class="hero-desc">
-        Transforming homes, offices and commercial spaces across Nairobi into refined,
+        Transforming homes, offices and commercial spaces across Nairobi into refined, 
         liveable works of art — where African warmth meets contemporary elegance.
       </p>
       <div class="hero-buttons">
@@ -1093,18 +1094,18 @@
           <div class="about-name">Arjun Patel</div>
           <h2 class="section-title" style="margin-bottom:1.5rem">Crafting spaces<br/><em>with intention</em></h2>
           <p class="about-text">
-            Born and raised in Nairobi, I grew up surrounded by the vivid colours, textures and
-            stories woven into East African life. After completing a degree in Interior Architecture
-            at the University of Nairobi and a postgraduate diploma in spatial design in London,
-            I returned home with one clear purpose — to build spaces that honour where we come from
+            Born and raised in Nairobi, I grew up surrounded by the vivid colours, textures and 
+            stories woven into East African life. After completing a degree in Interior Architecture 
+            at the University of Nairobi and a postgraduate diploma in spatial design in London, 
+            I returned home with one clear purpose — to build spaces that honour where we come from 
             while embracing where we're headed.
           </p>
           <div class="about-quote">
             "Every room has a personality waiting to be discovered. My job is simply to listen."
           </div>
           <p class="about-text">
-            Over twelve years, I've had the privilege of designing for families in Karen,
-            corporate suites in Westlands, boutique hotels on the Coast and restaurants in
+            Over twelve years, I've had the privilege of designing for families in Karen, 
+            corporate suites in Westlands, boutique hotels on the Coast and restaurants in 
             the CBD. Each project is treated as a singular conversation — never a formula.
             At Nayls Enterprise, we don't do templates. We do you.
           </p>
@@ -1130,8 +1131,8 @@
           <h2 class="section-title">Full-spectrum<br/><em>design services</em></h2>
         </div>
         <p class="services-desc">
-          From a single room refresh to a full building fit-out, we offer end-to-end interior
-          design solutions tailored to your vision, lifestyle and budget. Every service is
+          From a single room refresh to a full building fit-out, we offer end-to-end interior 
+          design solutions tailored to your vision, lifestyle and budget. Every service is 
           delivered with the same care — regardless of scale.
         </p>
       </div>
@@ -1276,7 +1277,7 @@
       <div class="contact-grid">
         <div class="contact-info">
           <p class="contact-text">
-            Ready to transform your space? We'd love to hear about your project.
+            Ready to transform your space? We'd love to hear about your project. 
             Reach out via the form or any of the channels below — we respond within 24 hours.
           </p>
           <div class="contact-detail">
@@ -1341,7 +1342,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo">Wooden Nayls Enterprise</div>
+    <div class="footer-logo">Nayls Enterprise</div>
     <div style="font-size:0.78rem">© 2025 Nayls Enterprise. Nairobi, Kenya. All rights reserved.</div>
     <div class="footer-links">
       <a href="#hero">Home</a>
@@ -1600,6 +1601,17 @@
       // Nav shadow on scroll
       document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
     });
+  </script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
   </script>
 </body>
 </html>
