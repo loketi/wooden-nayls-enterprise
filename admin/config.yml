@@ -1,7 +1,10 @@
 backend:
-  name: github
-  repo: loketi/wooden-nayls-enterprise
+  name: git-gateway
   branch: main
+
+site_url: https://wooden-nayls-enterprise.netlify.app
+identity_url: https://wooden-nayls-enterprise.netlify.app/.netlify/identity
+gateway_url: https://wooden-nayls-enterprise.netlify.app/.netlify/git
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
