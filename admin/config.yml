@@ -1,0 +1,36 @@
+backend:
+  name: github
+  repo: loketi/wooden-nayls-enterprise
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "projects"
+    label: "Projects"
+    folder: "content/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Category", name: "category", widget: "select",
+          options: ["Residential", "Commercial", "Hospitality"] }
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options:
+          - { label: "Published", value: "published" }
+          - { label: "Featured", value: "featured" }
+          - { label: "Draft", value: "draft" }
+          - { label: "Archived", value: "archived" }
+        default: "published"
+      - { label: "Description", name: "description", widget: "text" }
+      - label: "Photos"
+        name: "images"
+        widget: "list"
+        field: { label: "Photo", name: "image", widget: "image" }
+      - { label: "Location", name: "location", widget: "string" }
+      - { label: "Area (sqm)", name: "area", widget: "string" }
+      - { label: "Duration", name: "duration", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
