@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wooden Nayls Enterprise — Interior Design, Nairobi</title>
+  <title>Nayls Enterprise — Interior Design, Nairobi</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1017,7 +1017,7 @@
 
   <!-- NAV -->
   <nav id="navbar">
-    <a class="nav-logo" href="#hero">Wooden Nayls <span>Enterprise</span></a>
+    <a class="nav-logo" href="#hero">Nayls <span>Enterprise</span></a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
@@ -1038,7 +1038,7 @@
         beautifully.
       </h1>
       <p class="hero-desc">
-        Transforming homes, offices and commercial spaces across Nairobi into refined,
+        Transforming homes, offices and commercial spaces across Nairobi into refined, 
         liveable works of art — where African warmth meets contemporary elegance.
       </p>
       <div class="hero-buttons">
@@ -1093,18 +1093,18 @@
           <div class="about-name">Arjun Patel</div>
           <h2 class="section-title" style="margin-bottom:1.5rem">Crafting spaces<br/><em>with intention</em></h2>
           <p class="about-text">
-            Born and raised in Nairobi, I grew up surrounded by the vivid colours, textures and
-            stories woven into East African life. After completing a degree in Interior Architecture
-            at the University of Nairobi and a postgraduate diploma in spatial design in London,
-            I returned home with one clear purpose — to build spaces that honour where we come from
+            Born and raised in Nairobi, I grew up surrounded by the vivid colours, textures and 
+            stories woven into East African life. After completing a degree in Interior Architecture 
+            at the University of Nairobi and a postgraduate diploma in spatial design in London, 
+            I returned home with one clear purpose — to build spaces that honour where we come from 
             while embracing where we're headed.
           </p>
           <div class="about-quote">
             "Every room has a personality waiting to be discovered. My job is simply to listen."
           </div>
           <p class="about-text">
-            Over twelve years, I've had the privilege of designing for families in Karen,
-            corporate suites in Westlands, boutique hotels on the Coast and restaurants in
+            Over twelve years, I've had the privilege of designing for families in Karen, 
+            corporate suites in Westlands, boutique hotels on the Coast and restaurants in 
             the CBD. Each project is treated as a singular conversation — never a formula.
             At Nayls Enterprise, we don't do templates. We do you.
           </p>
@@ -1130,8 +1130,8 @@
           <h2 class="section-title">Full-spectrum<br/><em>design services</em></h2>
         </div>
         <p class="services-desc">
-          From a single room refresh to a full building fit-out, we offer end-to-end interior
-          design solutions tailored to your vision, lifestyle and budget. Every service is
+          From a single room refresh to a full building fit-out, we offer end-to-end interior 
+          design solutions tailored to your vision, lifestyle and budget. Every service is 
           delivered with the same care — regardless of scale.
         </p>
       </div>
@@ -1276,7 +1276,7 @@
       <div class="contact-grid">
         <div class="contact-info">
           <p class="contact-text">
-            Ready to transform your space? We'd love to hear about your project.
+            Ready to transform your space? We'd love to hear about your project. 
             Reach out via the form or any of the channels below — we respond within 24 hours.
           </p>
           <div class="contact-detail">
@@ -1392,8 +1392,72 @@
   </div>
 
   <script>
-    // ── PROJECT DATA ──
+    // ── LIVE CONTENT FETCH ──
+    // Projects are loaded from /content/projects/*.json files
+    // written by Decap CMS. allProjects holds the fetched data
+    // so filter buttons can re-render without re-fetching.
+    let allProjects = [];
 
+    async function loadProjects() {
+      const portfolioGrid = document.getElementById('portfolio-grid');
+      const featuredSection = document.getElementById('featured-section');
+
+      // Show a loading state while fetching
+      portfolioGrid.innerHTML = '<p style="color:var(--text-muted);padding:2rem 0;font-size:0.9rem;letter-spacing:0.05em;">Loading projects…</p>';
+
+      try {
+        // Use the GitHub Contents API to list all .json files in content/projects/
+        const apiUrl = 'https://api.github.com/repos/loketi/wooden-nayls-enterprise/contents/content/projects';
+        const listRes = await fetch(apiUrl, {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+
+        if (!listRes.ok) throw new Error(`GitHub API error: ${listRes.status}`);
+
+        const files = await listRes.json();
+
+        // Filter to only .json files (Decap CMS creates one per project)
+        const jsonFiles = files.filter(f => f.name.endsWith('.json'));
+
+        if (jsonFiles.length === 0) {
+          portfolioGrid.innerHTML = '<p style="color:var(--text-muted);padding:2rem 0;">No projects published yet. Check back soon.</p>';
+          featuredSection.style.display = 'none';
+          return;
+        }
+
+        // Fetch each project file in parallel using its download_url
+        const projectData = await Promise.all(
+          jsonFiles.map(f => fetch(f.download_url).then(r => r.json()))
+        );
+
+        // Normalise: map Decap CMS fields to the shape the renderer expects
+        allProjects = projectData.map((p, i) => ({
+          id: i + 1,
+          title:       p.title       || 'Untitled Project',
+          category:    p.category    || 'Residential',
+          status:      p.status      || 'published',
+          date:        p.date        || '',
+          description: p.description || '',
+          // Decap stores images as an array of path strings e.g. ["/images/uploads/photo.jpg"]
+          images:      Array.isArray(p.images) ? p.images : [],
+          meta: {
+            Location: p.location || '',
+            Area:     p.area     || '',
+            Duration: p.duration || '',
+          }
+        }));
+
+        // Sort newest first
+        allProjects.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        renderPortfolio('all', allProjects);
+
+      } catch (err) {
+        console.error('Could not load projects:', err);
+        portfolioGrid.innerHTML = '<p style="color:var(--text-muted);padding:2rem 0;">Projects could not be loaded right now. Please try again later.</p>';
+        featuredSection.style.display = 'none';
+      }
+    }
 
     // ── RENDER PORTFOLIO ──
     function getStatusClass(status) {
@@ -1434,11 +1498,14 @@
       featuredGrid.innerHTML = '';
       portfolioGrid.innerHTML = '';
 
+      // Always hide draft projects from the public-facing site
+      const visible = projects.filter(p => p.status !== 'draft');
+
       const filtered = filter === 'all'
-        ? projects
+        ? visible
         : filter === 'featured'
-        ? projects.filter(p => p.status === 'featured')
-        : projects.filter(p => p.category.toLowerCase() === filter);
+        ? visible.filter(p => p.status === 'featured')
+        : visible.filter(p => p.category.toLowerCase() === filter);
 
       let hasFeatured = false;
 
@@ -1454,65 +1521,17 @@
       featuredSection.style.display = hasFeatured ? 'block' : 'none';
     }
 
-    async function loadProjects() {
-  try {
-    const files = await fetch('/content/projects/')
-      .then(r => r.text())
-      .then(html => {
-        const matches = [...html.matchAll(/href="([^"]+\.json)"/g)];
-        return matches.map(m => m[1]);
-      });
-
-    const projects = await Promise.all(
-      files.map(f => fetch(f).then(r => r.json()))
-    );
-
-    renderPortfolio('all', projects);
-  } catch (err) {
-    console.error('Could not load projects:', err);
-    // Show empty state gracefully
-    document.getElementById('portfolio-grid').innerHTML =
-      '<p style="color:var(--text-muted);padding:2rem 0;">No projects published yet.</p>';
-    document.getElementById('featured-section').style.display = 'none';
-  }
-}
-
-loadProjects();
-
     // ── FILTER TABS ──
-    let allProjects = [];
-
-async function loadProjects() {
-  try {
-    const files = await fetch('/content/projects/')
-      .then(r => r.text())
-      .then(html => {
-        const matches = [...html.matchAll(/href="([^"]+\.json)"/g)];
-        return matches.map(m => m[1]);
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderPortfolio(btn.dataset.filter, allProjects);
       });
+    });
 
-    allProjects = await Promise.all(
-      files.map(f => fetch(f).then(r => r.json()))
-    );
-
-    renderPortfolio('all', allProjects);
-  } catch (err) {
-    console.error('Could not load projects:', err);
-    document.getElementById('portfolio-grid').innerHTML =
-      '<p style="color:var(--text-muted);padding:2rem 0;">No projects published yet.</p>';
-    document.getElementById('featured-section').style.display = 'none';
-  }
-}
-
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderPortfolio(btn.dataset.filter, allProjects);
-  });
-});
-
-loadProjects();
+    // Kick everything off
+    loadProjects();
 
     // ── MODAL ──
     function openModal(project) {
